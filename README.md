@@ -1,9 +1,6 @@
-# Deis Minio
+# Deis Slugbuilder
 
-This package provides a Minio S3-compatible object storage system inside
-of Kubernetes.
-
-- [Minio](http://minio.io)
+Deis Slugbuilder takes a git archive and compiles a slug and puts it in endpoint which can be a S3 based object store or file server.
 
 ## Installation
 

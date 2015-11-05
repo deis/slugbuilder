@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-if [[ -f /etc/environment_proxy ]]; then
-	source /etc/environment_proxy
-fi
+[[ $DEBUG ]] && set -x
 
 app_dir=/app
 build_root=/tmp/build
@@ -22,19 +20,17 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
 			echo $keyID $secretKey $domain
-			mc config host add $domain $keyID $secretKey
-			mc --debug cp $TAR_URL slug.tgz
-			tar -xzf slug.tgz -C /app/
-			rm slug.tgz
+			mc --quiet config host add $domain $keyID $secretKey
+			mc --quiet cp $TAR_URL /tmp/slug.tgz
+			tar -xzf /tmp/slug.tgz -C /app/
 			unset TAR_URL
 		fi
-	else
-		curl -s "$TAR_URL" | tar -xzC /app/
-		unset SLUG_URL
 	fi
-  curl -s -L --noproxy "discoverd"  "${TAR_URL}" | tar -xzC /app/
-  unset TAR_URL
+else
+	curl -s "$TAR_URL" | tar -xzC /app/
+	unset TAR_URL
 fi
+
 
 if [[ "$1" == "-" ]]; then
     slug_file="$1"
@@ -203,10 +199,11 @@ if [[ "$slug_file" != "-" ]]; then
 					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 					domain=`echo $put_url | awk -F/ '{print $3}'`
 					echo $keyID $secretKey $domain
-					mc config host add $domain $keyID $secretKey
-					mc --debug cp slug.tgz $put_url/slug.tgz
+					mc --quiet config host add $domain $keyID $secretKey
+					mc --quiet cp $slug_file $put_url/
 				fi
-			else
-        curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
-    fi
+			fi
+		else
+      curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
+  	fi
 fi

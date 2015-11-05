@@ -2,23 +2,23 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: deis-slugrunner
+  name: deis-slugbuilder
   labels:
     heritage: deis
     version: 2015-sept
 spec:
   restartPolicy: Never
   containers:
-    - name: deis-slugrunner
+    - name: deis-slugbuilder
       imagePullPolicy: Always
-      image: smothiki/slugbuilder:1
-      command:
-        - /mp/build/biulder.sh
+      image: smothiki/slugbuilder:5.3
       env:
+        - name: DEBUG
+          value: "1"
         - name: TAR_URL
           value: "https://s3.amazonaws.com/mydaffa/mytar.tgz"
         - name : put_url
-          value: "https://s3.amazonaws.com/mydaffa"
+          value: "https://s3-us-west-1.amazonaws.com/myjaffa"
       volumeMounts:
         - name: object-store
           mountPath: /var/run/secrets/object/store
