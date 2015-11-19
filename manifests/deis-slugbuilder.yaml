@@ -16,9 +16,9 @@ spec:
         - name: DEBUG
           value: "1"
         - name: TAR_URL
-          value: "https://s3.amazonaws.com/mydaffa/mytar.tgz"
+          value: "https://s3.amazonaws.com/mytar/mytar.tgz"
         - name : put_url
-          value: "https://s3-us-west-1.amazonaws.com/myjaffa"
+          value: "https://s3-us-west-1.amazonaws.com/myslug/tmp"
       volumeMounts:
         - name: object-store
           mountPath: /var/run/secrets/object/store
