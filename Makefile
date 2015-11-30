@@ -1,24 +1,27 @@
-SHORT_NAME := slugbuilder
+SHORT_NAME ?= slugbuilder
 
 export GO15VENDOREXPERIMENT=1
 
 # Note that Minio currently uses CGO.
 
-VERSION := 0.0.1-$(shell date "+%Y%m%d%H%M%S")
+VERSION ?= 0.0.1-$(shell date "+%Y%m%d%H%M%S")
 LDFLAGS := "-s -X main.version=${VERSION}"
+IMAGE_PREFIX ?= deis
 BINDIR := ./rootfs/bin
 DEV_REGISTRY ?= $$DEV_REGISTRY
-DEIS_REGISTRY ?= ${DEV_REGISTRY}
+DEIS_REGISTRY ?= ${DEV_REGISTRY}/
 
-IMAGE := ${DEIS_REGISTRY}/${SHORT_NAME}:${VERSION}
+IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 POD := manifests/deis-slugbuilder.yaml
 SEC := manifests/deis-store-secret.yaml
 
 all: build docker-build docker-push
 
+bootstrap:
+	@echo Nothing to do.
+
 build:
-	mkdir -p ${BINDIR}
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags '-s' -o $(BINDIR)/boot boot.go || exit 1
+	@echo Nothing to do.
 
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
@@ -44,17 +47,12 @@ secrets:
 
 kube-service: kube-secrets
 	- kubectl create -f ${SVC}
-	- kubectl create -f manifests/deis-minio-secretUser.yaml
 
 kube-clean:
 	- kubectl delete rc deis-${SHORT_NAME}-rc
 
-kube-mc:
-	kubectl create -f manifests/deis-mc-pod.yaml
+test:
+	@echo "Implement functional tests in _tests directory"
 
-mc:
-	docker build -t ${DEIS_REGISTRY}/deis/minio-mc:latest mc
-	docker push ${DEIS_REGISTRY}/deis/minio-mc:latest
-	perl -pi -e "s|image: [a-z0-9.:]+\/|image: ${DEIS_REGISTRY}/|g" manifests/deis-mc-pod.yaml
-
-.PHONY: all build docker-compile kube-up kube-down deploy mc kube-mc
+.PHONY: all bootstrap build docker-build docker-push deploy kube-pod kube-secrets \
+	secrets kube-service kube-clean test
