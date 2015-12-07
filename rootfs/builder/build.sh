@@ -25,10 +25,10 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			tar -xzf /tmp/slug.tgz -C /app/
 			unset TAR_URL
 		fi
+	else
+		curl -s "$TAR_URL" | tar -xzC /app/
+		unset TAR_URL
 	fi
-else
-	curl -s "$TAR_URL" | tar -xzC /app/
-	unset TAR_URL
 fi
 
 
@@ -202,8 +202,8 @@ if [[ "$slug_file" != "-" ]]; then
 					mc --quiet config host add $domain $keyID $secretKey
 					mc --quiet cp $slug_file $put_url/
 				fi
+			else
+				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
 			fi
-		else
-      curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
-  	fi
+		fi
 fi
