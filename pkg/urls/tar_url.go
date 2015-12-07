@@ -13,6 +13,10 @@ type Tar struct {
 	ObjectName string
 }
 
+func (t Tar) String() string {
+	return fmt.Sprintf("%s/%s/%s", t.Host, t.Bucket, t.ObjectName)
+}
+
 func ParseTar(str string) (*Tar, error) {
 	u, err := urlx.Parse(str)
 	if err != nil {

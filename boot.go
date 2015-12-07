@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,13 +16,14 @@ const (
 	putURLEnv           = "PUT_URL"
 	accessKeyIDFile     = "/var/run/secrets/object/store/access-key-id"
 	accessSecretKeyFile = "/var/run/secrets/object/store/access-secret-key"
+	slugFileName        = "/tmp/slug.tgz"
 )
 
 func main() {
 	tarURLStr := util.MustEnv(tarURLEnv)
 	putURLStr := util.MustEnv(putURLEnv)
 
-	tarURL, err := urls.ParseTar(tarURLStr)
+	tar, err := urls.ParseTar(tarURLStr)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
@@ -40,7 +42,7 @@ func main() {
 
 	log.Printf("downloading %s", tarURL)
 	config := minio.Config{
-		Endpoint:        tarURL.Host,
+		Endpoint:        tar.Host,
 		AccessKeyID:     accessKeyID,
 		SecretAccessKey: accessSecretKey,
 	}
@@ -50,5 +52,24 @@ func main() {
 		log.Printf("couldn't create new S3 client (%s)", err)
 		os.Exit(1)
 	}
+
+	seeker, err := s3Client.GetObject(tar.Bucket, tar.ObjectName)
+	if err != nil {
+		log.Printf("error getting object %s", tar)
+		os.Exit(1)
+	}
+
+	slugFile, err := os.Create(slugFileName)
+	if err != nil {
+		log.Printf("error creating slugfile (%s)", slugFileName)
+		os.Exit(1)
+	}
+	defer slugfile.Close()
+	/*written*/_, err := io.Copy(slugFile, seeker)
+	if err != nil {
+		log.Printf("error downloading entire tar file (%s)", tar)
+		os.Exit(1)
+	}
+	// TODO: check written was the same number of bytes as the actual file
 
 }
