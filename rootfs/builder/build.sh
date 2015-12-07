@@ -20,8 +20,8 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
 			echo $keyID $secretKey $domain
-			mc --quiet config host add $domain $keyID $secretKey
-			mc --quiet cp $TAR_URL /tmp/slug.tgz
+			/bin/mc --quiet config host add $domain $keyID $secretKey
+			/bin/mc --quiet cp $TAR_URL /tmp/slug.tgz
 			tar -xzf /tmp/slug.tgz -C /app/
 			unset TAR_URL
 		fi
