@@ -13,6 +13,8 @@ mkdir -p $cache_root
 mkdir -p $buildpack_root
 mkdir -p $build_root/.profile.d
 
+MC_PREFIX="mc --quiet -C $MC_CONFIG"
+
 if ! [[ -z "${TAR_URL}" ]]; then
 	if [[ -e /var/run/secrets/object/store/access-key-id ]]; then
 		if [[ -e /var/run/secrets/object/store/access-secret-key ]]; then
@@ -20,8 +22,8 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
 			echo $keyID $secretKey $domain
-			mc --quiet config host add "http://$domain" $keyID $secretKey
-			mc --quiet cp $TAR_URL /tmp/slug.tgz
+			$MC_PREFIX config host add "http://$domain" $keyID $secretKey
+			$MC_PREFIX cp $TAR_URL /tmp/slug.tgz
 			tar -xzf /tmp/slug.tgz -C /app/
 			unset TAR_URL
 		fi
@@ -199,8 +201,8 @@ if [[ "$slug_file" != "-" ]]; then
 					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 					domain=`echo $put_url | awk -F/ '{print $3}'`
 					echo $keyID $secretKey $domain
-					mc --quiet config host add "http://$domain" $keyID $secretKey
-					mc --quiet cp $slug_file $put_url/
+					$MC_PREFIX config host add "http://$domain" $keyID $secretKey
+					$MC_PREFIX cp $slug_file $put_url/
 				fi
 			else
 				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
