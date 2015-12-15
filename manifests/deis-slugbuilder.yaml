@@ -20,10 +20,10 @@ spec:
         - name : put_url
           value: "https://s3-us-west-1.amazonaws.com/myslug/tmp"
       volumeMounts:
-        - name: object-store
+        - name: minio-user
           mountPath: /var/run/secrets/object/store
           readOnly: true
   volumes:
-    - name: object-store
+    - name: minio-user
       secret:
-        secretName: object-store
+        secretName: minio-user
