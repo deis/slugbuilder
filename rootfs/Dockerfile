@@ -17,6 +17,6 @@ RUN /tmp/builder/install-buildpacks
 
 # this is so the minio client (https://github.com/minio/mc) works properly
 ENV DOCKERIMAGE=1
-# ENTRYPOINT ["/tmp/builder/build.sh"]
+ENTRYPOINT ["/tmp/builder/build.sh"]
 
 ENV DEIS_RELEASE 1.12.0-dev
