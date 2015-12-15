@@ -201,8 +201,8 @@ if [[ "$slug_file" != "-" ]]; then
 					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 					domain=`echo $put_url | awk -F/ '{print $3}'`
 					echo $keyID $secretKey $domain
-					mc --quiet config host add "http://$domain" $keyID $secretKey
-					mc --quiet cp $slug_file $put_url/
+					$MC_PREFIX config host add "http://$domain" $keyID $secretKey
+					$MC_PREFIX cp $slug_file $put_url/
 				fi
 			else
 				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
