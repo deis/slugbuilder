@@ -19,4 +19,4 @@ RUN /tmp/builder/install-buildpacks
 ENV DOCKERIMAGE=1
 ENTRYPOINT ["/tmp/builder/build.sh"]
 
-ENV DEIS_RELEASE 1.12.0-dev
+ENV DEIS_RELEASE 2.0.0
