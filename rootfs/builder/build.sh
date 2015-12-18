@@ -21,7 +21,6 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			keyID=`cat /var/run/secrets/object/store/access-key-id`
 			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
-			echo $keyID $secretKey $domain
 			$MC_PREFIX config host add "http://$domain" $keyID $secretKey &>/dev/null
 			$MC_PREFIX cp $TAR_URL /tmp/slug.tgz &>/dev/null
 			tar -xzf /tmp/slug.tgz -C /app/
