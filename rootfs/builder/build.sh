@@ -199,7 +199,6 @@ if [[ "$slug_file" != "-" ]]; then
 					keyID=`cat /var/run/secrets/object/store/access-key-id`
 					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 					domain=`echo $put_url | awk -F/ '{print $3}'`
-					echo $keyID $secretKey $domain
 					$MC_PREFIX config host add "http://$domain" $keyID $secretKey &>/dev/null
 					$MC_PREFIX cp $slug_file $put_url/ &>/dev/null
 				fi
