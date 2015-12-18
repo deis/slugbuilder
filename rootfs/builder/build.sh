@@ -22,8 +22,8 @@ if ! [[ -z "${TAR_URL}" ]]; then
 			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
 			echo $keyID $secretKey $domain
-			$MC_PREFIX config host add "http://$domain" $keyID $secretKey
-			$MC_PREFIX cp $TAR_URL /tmp/slug.tgz
+			$MC_PREFIX config host add "http://$domain" $keyID $secretKey &>/dev/null
+			$MC_PREFIX cp $TAR_URL /tmp/slug.tgz &>/dev/null
 			tar -xzf /tmp/slug.tgz -C /app/
 			unset TAR_URL
 		fi
@@ -201,8 +201,8 @@ if [[ "$slug_file" != "-" ]]; then
 					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
 					domain=`echo $put_url | awk -F/ '{print $3}'`
 					echo $keyID $secretKey $domain
-					$MC_PREFIX config host add "http://$domain" $keyID $secretKey
-					$MC_PREFIX cp $slug_file $put_url/
+					$MC_PREFIX config host add "http://$domain" $keyID $secretKey &>/dev/null
+					$MC_PREFIX cp $slug_file $put_url/ &>/dev/null
 				fi
 			else
 				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
