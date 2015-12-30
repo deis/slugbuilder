@@ -10,8 +10,8 @@ spec:
   restartPolicy: Never
   containers:
     - name: deis-slugbuilder
-      imagePullPolicy: Always
-      image: quay.io/deisci/slugbuilder:v2-alpha
+      imagePullPolicy: IfNotPresent
+      image: quay.io/deis/slugbuilder:2.0.0-alpha
       env:
         - name: DEBUG
           value: "1"
