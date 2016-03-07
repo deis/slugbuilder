@@ -189,6 +189,14 @@ else
     tar -z --exclude='.git' -C $build_root -cf $slug_file . | cat
 fi
 
+if [[ ! -f "$build_root/Procfile" ]]; then
+	if [[ -s "$build_root/.release" ]]; then
+		ruby -e "require 'yaml';procTypes = (YAML.load_file('$build_root/.release')['default_process_types']);open('$build_root/Procfile','w') {|f| YAML.dump(procTypes,f)}"
+	else
+		echo "{}" > $build_root/Procfile
+	fi
+fi
+
 if [[ "$slug_file" != "-" ]]; then
     slug_size=$(du -Sh "$slug_file" | cut -f1)
     echo_title "Compiled slug size is $slug_size"
@@ -201,9 +209,11 @@ if [[ "$slug_file" != "-" ]]; then
 					domain=`echo $put_url | awk -F/ '{print $3}'`
 					$MC_PREFIX config host add "http://$domain" $keyID $secretKey &>/dev/null
 					$MC_PREFIX cp $slug_file $put_url/ &>/dev/null
+					$MC_PREFIX cp $build_root/Procfile $put_url/ &>/dev/null
 				fi
 			else
 				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
+				curl -0 -s -o /dev/null -X PUT -T $build_root/Procfile "$put_url"
 			fi
 		fi
 fi
