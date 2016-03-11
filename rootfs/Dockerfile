@@ -7,7 +7,10 @@ ADD ./bin /bin
 RUN chown -R slug:slug /app
 RUN chown slug:slug /bin/mc
 
-USER slug
+RUN apt-get update && apt-get install -y curl python
+RUN curl -sSL https://raw.githubusercontent.com/pypa/pip/7.1.2/contrib/get-pip.py | python -
+RUN pip install boto3==1.2.6
+
 ENV HOME /app
 ENV MC_CONFIG=/app/mc_config
 RUN mkdir -p /app/mc_config

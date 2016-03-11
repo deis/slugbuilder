@@ -13,8 +13,6 @@ DEIS_REGISTRY ?= ${DEV_REGISTRY}/
 include versioning.mk
 
 
-all: build docker-build docker-push
-
 bootstrap:
 	@echo Nothing to do.
 
