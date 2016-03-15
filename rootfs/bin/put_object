@@ -5,29 +5,45 @@ import sys
 
 import boto3
 import botocore
+import json
 from botocore.utils import fix_s3_host
-
-with open('/var/run/secrets/deis/objectstore/creds/accesskey', 'r') as access_file:
-    AWS_ACCESS_KEY_ID = access_file.read()
-with open('/var/run/secrets/deis/objectstore/creds/secretkey', 'r') as secret_file:
-    AWS_SECRET_ACCESS_KEY = secret_file.read()
-with open('/var/run/secrets/deis/objectstore/creds/region', 'r') as region_file:
-    AWS_DEFAULT_REGION = region_file.read()
-
-bucket_name = ""
-with open('/var/run/secrets/deis/objectstore/creds/bucket', 'r') as bucket_file:
-    bucket_name = bucket_file.read()
-
-
-if os.getenv('BUILDER_STORAGE') == "s3":
-    conn = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_DEFAULT_REGION)
-    print "works"
-else:
-    conn = boto3.resource('s3', endpoint_url=os.getenv('S3_URL'))
-    # stop boto3 from automatically changing the endpoint
-    conn.meta.client.meta.events.unregister('before-sign.s3', fix_s3_host)
+from oauth2client.service_account import ServiceAccountCredentials
+from gcloud.storage.client import Client
 
 put_path = os.getenv('put_url')
+if os.getenv('BUILDER_STORAGE') == "s3":
+  with open('/var/run/secrets/deis/objectstore/creds/accesskey', 'r') as access_file:
+      AWS_ACCESS_KEY_ID = access_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/secretkey', 'r') as secret_file:
+      AWS_SECRET_ACCESS_KEY = secret_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/region', 'r') as region_file:
+      AWS_DEFAULT_REGION = region_file.read()
 
-conn.Bucket(bucket_name).Object(put_path+"/slug.tgz").upload_file('/tmp/slug.tgz')
-conn.Bucket(bucket_name).Object(put_path+"/Procfile").upload_file('/tmp/build/Procfile')
+  bucket_name = ""
+  with open('/var/run/secrets/deis/objectstore/creds/bucket', 'r') as bucket_file:
+      bucket_name = bucket_file.read()
+
+
+  if os.getenv('BUILDER_STORAGE') == "s3":
+      conn = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_DEFAULT_REGION)
+      print "works"
+  else:
+      conn = boto3.resource('s3', endpoint_url=os.getenv('S3_URL'))
+      # stop boto3 from automatically changing the endpoint
+      conn.meta.client.meta.events.unregister('before-sign.s3', fix_s3_host)
+
+  conn.Bucket(bucket_name).Object(put_path+"/slug.tgz").upload_file('/tmp/slug.tgz')
+  conn.Bucket(bucket_name).Object(put_path+"/Procfile").upload_file('/tmp/build/Procfile')
+
+elif os.getenv('BUILDER_STORAGE') == "gcs":
+  #https://github.com/GoogleCloudPlatform/gcloud-python
+  bucket_name = ""
+  with open('/var/run/secrets/deis/objectstore/creds/builder-bucket', 'r') as bucket_file:
+      bucket_name = bucket_file.read()
+  scopes = ['https://www.googleapis.com/auth/devstorage.full_control']
+  credentials = ServiceAccountCredentials.from_json_keyfile_name('/var/run/secrets/deis/objectstore/creds/key.json', scopes=scopes)
+  with open('/var/run/secrets/deis/objectstore/creds/key.json') as data_file:
+      data = json.load(data_file)
+  client = Client(credentials=credentials, project=data['project_id'])
+  client.get_bucket(bucket_name).blob(put_path+"/slug.tgz").upload_from_filename(filename="/tmp/slug.tgz")
+  client.get_bucket(bucket_name).blob(put_path+"/Procfile").upload_from_filename(filename="/tmp/build/Procfile")
