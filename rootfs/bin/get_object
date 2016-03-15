@@ -9,6 +9,7 @@ import json
 from botocore.utils import fix_s3_host
 from oauth2client.service_account import ServiceAccountCredentials
 from gcloud.storage.client import Client
+from azure.storage.blob import BlockBlobService
 
 tar_path = os.getenv('TAR_URL')
 
@@ -43,3 +44,13 @@ elif os.getenv('BUILDER_STORAGE') == "gcs":
         data = json.load(data_file)
     client = Client(credentials=credentials, project=data['project_id'])
     client.get_bucket(bucket_name).get_blob(tar_path).download_to_filename("/tmp/slug.tgz")
+
+elif os.getenv('BUILDER_STORAGE') == "azure":
+  with open('/var/run/secrets/deis/objectstore/creds/accountname', 'r') as account_file:
+      accountname = account_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/accountkey', 'r') as key_file:
+      accountkey = key_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/builder-container', 'r') as container_file:
+      container_name = container_file.read()
+  block_blob_service = BlockBlobService(account_name=accountname, account_key=accountkey)
+  block_blob_service.get_blob_to_path(container_name, tar_path, '/tmp/slug.tgz')

@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y ca-certificates curl python libffi-dev
 RUN curl -sSL https://raw.githubusercontent.com/pypa/pip/7.1.2/contrib/get-pip.py | python -
 RUN pip install boto3==1.2.6
 RUN pip install  gcloud==0.11.0
+RUN pip install azure-storage==0.30.0
 
 ENV HOME /app
 ENV MC_CONFIG=/app/mc_config

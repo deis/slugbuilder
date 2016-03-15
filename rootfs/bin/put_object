@@ -9,6 +9,7 @@ import json
 from botocore.utils import fix_s3_host
 from oauth2client.service_account import ServiceAccountCredentials
 from gcloud.storage.client import Client
+from azure.storage.blob import BlockBlobService
 
 put_path = os.getenv('put_url')
 if os.getenv('BUILDER_STORAGE') == "s3":
@@ -47,3 +48,15 @@ elif os.getenv('BUILDER_STORAGE') == "gcs":
   client = Client(credentials=credentials, project=data['project_id'])
   client.get_bucket(bucket_name).blob(put_path+"/slug.tgz").upload_from_filename(filename="/tmp/slug.tgz")
   client.get_bucket(bucket_name).blob(put_path+"/Procfile").upload_from_filename(filename="/tmp/build/Procfile")
+
+elif os.getenv('BUILDER_STORAGE') == "azure":
+  with open('/var/run/secrets/deis/objectstore/creds/accountname', 'r') as account_file:
+      accountname = account_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/accountkey', 'r') as key_file:
+      accountkey = key_file.read()
+  with open('/var/run/secrets/deis/objectstore/creds/builder-container', 'r') as container_file:
+      container_name = container_file.read()
+  block_blob_service = BlockBlobService(account_name=accountname, account_key=accountkey)
+  from azure.storage.blob import ContentSettings
+  block_blob_service.create_blob_from_path(container_name, put_path+"/slug.tgz", '/tmp/slug.tgz')
+  block_blob_service.create_blob_from_path(container_name, put_path+"/Procfile", '/tmp/build/Procfile')
