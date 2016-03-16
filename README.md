@@ -1,72 +1,42 @@
 # Deis Slugbuilder v2
 
 [![Build Status](https://travis-ci.org/deis/slugbuilder.svg?branch=master)](https://travis-ci.org/deis/slugbuilder)
+[![Docker Repository on Quay](https://quay.io/repository/deisci/slugbuilder/status "Docker Repository on Quay")](https://quay.io/repository/deisci/slugbuilder)
 
-Deis (pronounced DAY-iss) is an open source PaaS that makes it easy to deploy and manage
-applications on your own servers. Deis builds on [Kubernetes](http://kubernetes.io/) to provide
-a lightweight, [Heroku-inspired](http://heroku.com) workflow.
+Deis (pronounced DAY-iss) Workflow is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes](http://kubernetes.io) cluster, making it easy to deploy and manage applications on your own servers.
 
-## Work in Progress
+For more information about the Deis Workflow, please visit the main project page at https://github.com/deis/workflow.
 
-![Deis Graphic](https://s3-us-west-2.amazonaws.com/get-deis/deis-graphic-small.png)
+## Beta Status
 
-Deis Slugbuilder v2 is changing quickly. Your feedback and participation are more than welcome, but be
-aware that this project is considered a work in progress.
+This Deis component is currently in beta status, and we welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Development" section below and [submit a pull request][prs].
 
 # About
 
-Deis Slugbuilder takes a git archive and compiles a slug and puts it in endpoint which can be a S3 based object store or file server. It's launched by [`deis/builder`] containers when procfile-based application code is `git push`ed. Please see https://github.com/deis/builder/blob/master/README.md for a more detailed description of how `slugbuilder` interacts with `builder`.
+The slugbuilder downloads a git archive ([gzip](http://www.gzip.org/)ped [tar](https://www.gnu.org/software/tar/)ball) from a specified [S3 API compatible server][s3-api], compiles a [slug](https://devcenter.heroku.com/articles/slug-compiler) and uploads it to a specified S3 API compatible server.
 
-# Hacking Slugbuilder
+This component is usually launched by the [Deis Builder](https://github.com/deis/builder) and used inside the Deis [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service), but it is flexible enough to be used as a pod inside any Kubernetes cluster.
 
-First, install [helm](http://helm.sh) and [boot up a kubernetes cluster][install-k8s]. Next, add the
-`deis` repository to your chart list:
+Please see https://github.com/deis/builder/blob/master/README.md for a more detailed description of how `slugbuilder` interacts with `builder`.
 
-```console
-$ helm repo add deis https://github.com/deis/charts
-```
+# Development
 
-Then, install the Deis chart!
+The Deis project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
 
-```console
-$ helm install deis/deis
-```
-
-The chart will install the entire Deis platform onto Kubernetes. You can monitor all the pods that it installs by running:
-
-```console
-$ kubectl get pods --namespace=deis
-```
-
-Once this is done, SSH into a Kubernetes minion, and run the following:
-
-```
-$ curl -sSL http://deis.io/deis-cli/install.sh | sh
-$ sudo mv deis /bin
-$ kubectl get service deis-workflow
-$ deis register 10.247.59.157 # or the appropriate CLUSTER_IP
-$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-$ eval $(ssh-agent) && ssh-add ~/.ssh/id_rsa
-$ deis keys:add ~/.ssh/id_rsa.pub
-$ deis create --no-remote
-Creating Application... done, created madras-radiator
-$ deis pull deis/example-go -a madras-radiator
-Creating build... ..o
-```
-
-If you want to hack on a new feature, rebuild your code, build the `deis/slugbuilder` image and push it to a Docker registry. The `$DEIS_REGISTRY` environment variable must point to a registry accessible to your Kubernetes cluster. If you're using a locally hosted Docker registry, you may need to configure the Docker engines on your Kubernetes nodes to allow `--insecure-registry 192.168.0.0/16` (or the appropriate address range).
-
-```console
-$ make build docker-build docker-push
-```
-
+* Fork this repository
+* Make your changes
+* [Submit a pull request][prs] (PR) to this repository with your changes, and unit tests whenever possible.
+  * If your PR fixes any [issues][issues], make sure you write Fixes #1234 in your PR description (where #1234 is the number of the issue you're closing)
+* The Deis core contributors will review your code. After each of them sign off on your code, they'll label your PR with LGTM1 and LGTM2 (respectively). Once that happens, the contributors will merge it
+* 
 ## License
 
-Copyright 2013, 2014, 2015 Engine Yard, Inc.
+Copyright 2013, 2014, 2015, 2016 Engine Yard, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-
-[install-k8s]: http://kubernetes.io/gettingstarted/
+[issues]: https://github.com/deis/slugbuilder/issues
+[prs]: https://github.com/deis/slugbuilder/pulls
+[s3-api]: http://docs.aws.amazon.com/AmazonS3/latest/API/APIRest.html
