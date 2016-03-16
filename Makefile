@@ -4,16 +4,14 @@ export GO15VENDOREXPERIMENT=1
 
 # Note that Minio currently uses CGO.
 
-VERSION ?= 0.0.1-$(shell date "+%Y%m%d%H%M%S")
 LDFLAGS := "-s -X main.version=${VERSION}"
 IMAGE_PREFIX ?= deis
 BINDIR := ./rootfs/bin
 DEV_REGISTRY ?= $$DEV_REGISTRY
 DEIS_REGISTRY ?= ${DEV_REGISTRY}/
 
-IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
-POD := manifests/deis-slugbuilder.yaml
-SEC := manifests/deis-store-secret.yaml
+include versioning.mk
+
 
 all: build docker-build docker-push
 
@@ -25,12 +23,9 @@ build:
 
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-	# These are both YAML specific
-	# perl -pi -e "s|image: [a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|image: ${IMAGE}|g" ${RC}
-	# perl -pi -e "s|release: [a-zA-Z0-9.+_-]+|release: ${VERSION}|g" ${RC}
+	docker tag -f ${IMAGE} ${MUTABLE_IMAGE}
 
-docker-push:
-	docker push ${IMAGE}
+
 
 deploy: docker-build docker-push
 
