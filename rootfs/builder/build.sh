@@ -12,15 +12,11 @@ mkdir -p $app_dir
 mkdir -p $cache_root
 mkdir -p $buildpack_root
 mkdir -p $build_root/.profile.d
-mkdir -p /root/.aws
 
-gcs=storage.googleapis.com
-MC_PREFIX="mc --quiet -C $MC_CONFIG"
-
-if ! [[ -z "${TAR_URL}" ]]; then
+if ! [[ -z "${TAR_PATH}" ]]; then
 	get_object
 	tar -xzf /tmp/slug.tgz -C /app/
-	unset TAR_URL
+	unset TAR_PATH
 fi
 
 
@@ -192,7 +188,7 @@ if [[ "$slug_file" != "-" ]]; then
     slug_size=$(du -Sh "$slug_file" | cut -f1)
     echo_title "Compiled slug size is $slug_size"
 
-    if [[ $put_url ]]; then
+    if [[ $PUT_PATH ]]; then
 			put_object
 		fi
 fi
