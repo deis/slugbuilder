@@ -13,29 +13,10 @@ mkdir -p $cache_root
 mkdir -p $buildpack_root
 mkdir -p $build_root/.profile.d
 
-gcs=storage.googleapis.com
-MC_PREFIX="mc --quiet -C $MC_CONFIG"
-
-if ! [[ -z "${TAR_URL}" ]]; then
-	if [[ -e /var/run/secrets/object/store/access-key-id ]]; then
-		if [[ -e /var/run/secrets/object/store/access-secret-key ]]; then
-			keyID=`cat /var/run/secrets/object/store/access-key-id`
-			secretKey=`cat /var/run/secrets/object/store/access-secret-key`
-			protocol=`echo $TAR_URL | awk -F/ '{print $1}'`
-			domain=`echo $TAR_URL | awk -F/ '{print $3}'`
-			if [ "$domain" = "$gcs" ]; then
-				$MC_PREFIX config host add "$protocol//$domain" $keyID $secretKey S3v2 &>/dev/null
-			else
-				$MC_PREFIX config host add "$protocol//$domain" $keyID $secretKey &>/dev/null
-			fi
-			$MC_PREFIX cp $TAR_URL /tmp/slug.tgz &>/dev/null
-			tar -xzf /tmp/slug.tgz -C /app/
-			unset TAR_URL
-		fi
-	else
-		curl -s "$TAR_URL" | tar -xzC /app/
-		unset TAR_URL
-	fi
+if ! [[ -z "${TAR_PATH}" ]]; then
+	get_object
+	tar -xzf /tmp/slug.tgz -C /app/
+	unset TAR_PATH
 fi
 
 
@@ -207,24 +188,7 @@ if [[ "$slug_file" != "-" ]]; then
     slug_size=$(du -Sh "$slug_file" | cut -f1)
     echo_title "Compiled slug size is $slug_size"
 
-    if [[ $put_url ]]; then
-			if [[ -e /var/run/secrets/object/store/access-key-id ]]; then
-				if [[ -e /var/run/secrets/object/store/access-secret-key ]]; then
-					keyID=`cat /var/run/secrets/object/store/access-key-id`
-					secretKey=`cat /var/run/secrets/object/store/access-secret-key`
-					domain=`echo $put_url | awk -F/ '{print $3}'`
-					protocol=`echo $put_url  | awk -F/ '{print $1}'`
-					if [ "$domain" = "$gcs" ]; then
-						$MC_PREFIX config host add "$protocol//$domain" $keyID $secretKey S3v2 &>/dev/null
-					else
-						$MC_PREFIX config host add "$protocol//$domain" $keyID $secretKey &>/dev/null
-					fi
-					$MC_PREFIX cp $slug_file $put_url/ &>/dev/null
-					$MC_PREFIX cp $build_root/Procfile $put_url/ &>/dev/null
-				fi
-			else
-				curl -0 -s -o /dev/null -X PUT -T $slug_file "$put_url"
-				curl -0 -s -o /dev/null -X PUT -T $build_root/Procfile "$put_url"
-			fi
+    if [[ $PUT_PATH ]]; then
+			put_object
 		fi
 fi
