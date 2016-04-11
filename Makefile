@@ -7,11 +7,8 @@ export GO15VENDOREXPERIMENT=1
 LDFLAGS := "-s -X main.version=${VERSION}"
 IMAGE_PREFIX ?= deis
 BINDIR := ./rootfs/bin
-DEV_REGISTRY ?= $$DEV_REGISTRY
-DEIS_REGISTRY ?= ${DEV_REGISTRY}/
 
 include versioning.mk
-
 
 all: build docker-build docker-push
 
@@ -24,8 +21,6 @@ build:
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
 	docker tag -f ${IMAGE} ${MUTABLE_IMAGE}
-
-
 
 deploy: docker-build docker-push
 
