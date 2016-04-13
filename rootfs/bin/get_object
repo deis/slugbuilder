@@ -10,4 +10,4 @@ if [ "$BUILDER_STORAGE" == "minio" ]; then
 elif [ "$BUILDER_STORAGE" == "azure" ]; then
   export CONTAINER_FILE=/var/run/secrets/deis/objectstore/creds/builder-container
 fi
-objstorage --storage-type=$BUILDER_STORAGE download $TAR_PATH $GET_PATH
+objstorage --storage-type="$BUILDER_STORAGE" download "$TAR_PATH" "$GET_PATH"
