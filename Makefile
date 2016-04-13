@@ -10,6 +10,15 @@ BINDIR := ./rootfs/bin
 
 include versioning.mk
 
+SHELL_SCRIPTS = $(wildcard _scripts/*.sh) $(wildcard rootfs/bin/*) $(wildcard rootfs/builder/*)
+
+# The following variables describe the containerized development environment
+# and other build options
+DEV_ENV_IMAGE := quay.io/deis/go-dev:0.11.0
+DEV_ENV_WORK_DIR := /go/src/${REPO_PATH}
+DEV_ENV_CMD := docker run --rm -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR} ${DEV_ENV_IMAGE}
+DEV_ENV_CMD_INT := docker run -it --rm -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR} ${DEV_ENV_IMAGE}
+
 all: build docker-build docker-push
 
 bootstrap:
@@ -41,7 +50,15 @@ kube-service: kube-secrets
 kube-clean:
 	- kubectl delete rc deis-${SHORT_NAME}-rc
 
-test:
+test: test-style test-unit test-functional
+
+test-style:
+	${DEV_ENV_CMD} shellcheck $(SHELL_SCRIPTS)
+
+test-unit:
+	@echo "Implement unit tests in _tests directory"
+
+test-functional:
 	@echo "Implement functional tests in _tests directory"
 
 .PHONY: all bootstrap build docker-build docker-push deploy kube-pod kube-secrets \
