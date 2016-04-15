@@ -1,3 +1,23 @@
+### v2.0.0-beta1 -> v2.0.0-beta2
+
+#### Features
+
+ - [`a713e13`](https://github.com/deis/slugbuilder/commit/a713e139983995b9f8bdd424497f5fd7683aca03) storage: use the objectstorage cli for upload and download of slug
+ - [`71a4ed2`](https://github.com/deis/slugbuilder/commit/71a4ed22b32d2d74e7ef25d3c82eb3b21e283236) _scripts: add CHANGELOG.md and generator script
+ - [`9ab1265`](https://github.com/deis/slugbuilder/commit/9ab126507c86a476633f84cb0a23d67c20e1f9c8) storage: Add support for multiple object storages
+
+#### Fixes
+
+ - [`c55ef21`](https://github.com/deis/slugbuilder/commit/c55ef213fd4538cfe1bc4b7584e4d19af55a39d4) objectstorecli: the latest version having the s3 auth fix
+
+#### Maintenance
+
+ - [`d0cb417`](https://github.com/deis/slugbuilder/commit/d0cb417cb0ffb12e7edf6d0d22a3079f04e3b115) buildpacks: update heroku-buildpack-ruby to v145
+ - [`1f4479e`](https://github.com/deis/slugbuilder/commit/1f4479edb15936b2eea26c6964fec05af37e5710) buildpacks: update heroku-buildpack-multi to v1.0.0
+ - [`6037c8b`](https://github.com/deis/slugbuilder/commit/6037c8b67d1b3b9e31eab040b899aef9dead111b) buildpacks: update heroku-buildpack-nodejs to v89
+ - [`d9de4bc`](https://github.com/deis/slugbuilder/commit/d9de4bc9a5c62bc115107889623046c650ce8905) buildpacks: update heroku-buildpack-scala to v67
+ - [`a659ff7`](https://github.com/deis/slugbuilder/commit/a659ff767f4ecc031a568e3790ecc570e06573ae) buildpacks: update heroku-buildpack-python to v78
+
 ### 2.0.0-alpha -> v2.0.0-beta1
 
 #### Features
