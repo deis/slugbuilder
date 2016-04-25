@@ -1,3 +1,15 @@
+### v2.0.0-beta2 -> v2.0.0-beta3
+
+#### Maintenance
+
+ - [`8dbd543`](https://github.com/deis/slugbuilder/commit/8dbd543c27251eb7e30164e9403a1b192550182a) .travis.yml: Deep six the travis -> jenkins webhooks
+ - [`4b0f026`](https://github.com/deis/slugbuilder/commit/4b0f026a32a9b71952baaba40c97caf67d84c2f4) buildpacks: update heroku-buildpack-python to v80
+ - [`46944c1`](https://github.com/deis/slugbuilder/commit/46944c1b85dc02aa263512ee7bd8b4adf6a68680) buildpacks: update heroku-buildpack-go to v32
+ - [`928a283`](https://github.com/deis/slugbuilder/commit/928a2838e67fa96b2301202fc7ca3c44f6d41e5b) buildpacks: update heroku-buildpack-ruby to v146
+ - [`d204afa`](https://github.com/deis/slugbuilder/commit/d204afa1d5c235e3a7be3ec4b3a50559491d5bdf) buildpacks: update heroku-buildpack-php to v101
+ - [`537ec95`](https://github.com/deis/slugbuilder/commit/537ec953cb8f965aaba3194d3084c6a656d21fd8) buildpacks: update heroku-buildpack-scala to v69
+ - [`3c066a2`](https://github.com/deis/slugbuilder/commit/3c066a2914ff30113d140ed2a2b7bb4233b833df) changelog: update the changelog for the beta2
+
 ### v2.0.0-beta1 -> v2.0.0-beta2
 
 #### Features
