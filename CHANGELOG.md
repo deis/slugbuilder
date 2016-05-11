@@ -1,3 +1,16 @@
+### v2.0.0-beta3 -> v2.0.0-beta4
+
+#### Documentation
+
+ - [`3d76654`](https://github.com/deis/slugbuilder/commit/3d76654507f9ee5315d207a8063b8d628bef9474) CHANGELOG.md: update for v2.0.0-beta3
+
+#### Maintenance
+
+ - [`58d98a2`](https://github.com/deis/slugbuilder/commit/58d98a25b054eb53cb608f3f5e61ea17c277e826) buildpacks: update heroku-buildpack-php to v102
+ - [`3ba9995`](https://github.com/deis/slugbuilder/commit/3ba9995da832724ca1b3a5fc443b0162284319e5) buildpacks: update heroku-buildpack-nodejs to v90
+ - [`883ef2b`](https://github.com/deis/slugbuilder/commit/883ef2b9b8d42aaa03ee7603912d4e7fa3305688) buildpacks: update heroku-buildpack-go to v34
+ - [`3fd5577`](https://github.com/deis/slugbuilder/commit/3fd55775ba2c9675b1dcc3976b1f2ebda6457069) buildpacks: update heroku-buildpack-scala to v70
+
 ### v2.0.0-beta2 -> v2.0.0-beta3
 
 #### Maintenance
