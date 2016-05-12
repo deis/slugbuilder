@@ -19,4 +19,4 @@ RUN /tmp/builder/install-buildpacks
 
 ENTRYPOINT ["/tmp/builder/build.sh"]
 
-ENV DEIS_RELEASE 2.0.0-dev
+ENV WORKFLOW_RELEASE 2.0.0-dev
