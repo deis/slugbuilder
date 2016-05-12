@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-[[ $DEBUG ]] && set -x
+[[ $DEIS_DEBUG ]] && set -x
+unset DEIS_DEBUG
 
 app_dir=/app
 build_root=/tmp/build
