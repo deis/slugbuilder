@@ -1,3 +1,19 @@
+### v2.0.0-beta4 -> v2.0.0-rc1
+
+#### Fixes
+
+ - [`43670fd`](https://github.com/deis/slugbuilder/commit/43670fd42c207843b6b93d1455050233f53c0381) Dockerfile: update objstorage CLI
+ - [`8f14856`](https://github.com/deis/slugbuilder/commit/8f14856444da0460be6e630513d919f2edfb9cff) build.sh: rename DEBUG to DEIS_DEBUG, unset after use
+
+#### Documentation
+
+
+#### Maintenance
+
+ - [`9ec6144`](https://github.com/deis/slugbuilder/commit/9ec6144fcba25ef30e3c9b413caba1f66549e049) buildpacks: update heroku-buildpack-go to v40
+ - [`e2c6193`](https://github.com/deis/slugbuilder/commit/e2c6193f5b9b48191098cd196e2163052fe1feea) buildpacks: update heroku-buildpack-go to v37
+ - [`3aa67ed`](https://github.com/deis/slugbuilder/commit/3aa67ed9e94b684e2e0439acbee91cbda2cdbcad) rootfs/Dockerfile: DEIS_RELEASE -> WORKFLOW_RELEASE
+
 ### v2.0.0-beta3 -> v2.0.0-beta4
 
 #### Documentation
