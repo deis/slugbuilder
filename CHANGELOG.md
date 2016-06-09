@@ -1,3 +1,13 @@
+### v2.0.0-rc2 -> v2.0.0
+
+#### Documentation
+
+- [`1bbaf04`](https://github.com/deis/slugbuilder/commit/1bbaf04c1dbee3dab0881e1816d9dd4c8804616a) CHANGELOG.md: add entry for v2.0.0-rc2
+
+#### Maintenance
+
+- [`d059474`](https://github.com/deis/slugbuilder/commit/d0594746ff7f8ff7fac27386b5c5b197ff430e09) various: remove beta status
+
 ### v2.0.0-rc1 -> v2.0.0-rc2
 
 ### v2.0.0-beta4 -> v2.0.0-rc1
