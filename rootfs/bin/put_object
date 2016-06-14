@@ -6,7 +6,7 @@ PROC_PATH=/tmp/build/Procfile
 export BUCKET_FILE=/var/run/secrets/deis/objectstore/creds/builder-bucket
 if [ "$BUILDER_STORAGE" == "minio" ]; then
   export BUCKET_FILE=/app/objectstore/minio/builder-bucket
-elif [ "$BUILDER_STORAGE" == "azure" ] || [ "$BUILDER_STORAGE" == "azure" ] ; then
+elif [ "$BUILDER_STORAGE" == "azure" ] || [ "$BUILDER_STORAGE" == "swift" ] ; then
   export CONTAINER_FILE=/var/run/secrets/deis/objectstore/creds/builder-container
 fi
 objstorage --storage-type="$BUILDER_STORAGE" upload "$SLUG_PATH" "${PUT_PATH}/slug.tgz"
