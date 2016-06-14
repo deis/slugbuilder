@@ -5,7 +5,7 @@ RUN addgroup --quiet --gid 2000 slug && \
   useradd slug --uid=2000 --gid=2000 --home-dir /app --no-create-home
 
 ADD ./bin /bin
-ADD https://dl.bintray.com/deis/deisci/objstorage-7d48b36-linux-amd64 /bin/objstorage
+ADD https://storage.googleapis.com/object-storage-cli/7d48b36/objstorage-7d48b36-linux-amd64 /bin/objstorage
 RUN chmod +x /bin/objstorage
 RUN chown -R slug:slug /app
 RUN chown slug:slug /bin/get_object
