@@ -138,7 +138,7 @@ fi
 
 "$selected_buildpack/bin/compile" "$build_root" "$cache_root" "$env_root" | ensure_indent
 
-"$selected_buildpack/bin/release" "$build_root" "$cache_root" > $build_root/.release
+"$selected_buildpack/bin/release" "$build_root" > $build_root/.release
 
 ## Display process types
 
