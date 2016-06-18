@@ -7,10 +7,12 @@ unset DEIS_DEBUG
 app_dir=/app
 build_root=/tmp/build
 cache_root=/tmp/cache
+env_root=/tmp/env
 buildpack_root=/tmp/buildpacks
 
 mkdir -p $app_dir
 mkdir -p $cache_root
+mkdir -p $env_root
 mkdir -p $buildpack_root
 mkdir -p $build_root/.profile.d
 
@@ -134,7 +136,7 @@ fi
 
 ## Buildpack compile
 
-"$selected_buildpack/bin/compile" "$build_root" "$cache_root" | ensure_indent
+"$selected_buildpack/bin/compile" "$build_root" "$cache_root" "$env_root" | ensure_indent
 
 "$selected_buildpack/bin/release" "$build_root" "$cache_root" > $build_root/.release
 
