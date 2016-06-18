@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+import procfile
+
+if __name__ == "__main__":
+    with open(sys.argv[1], 'r') as f:
+        print(', '.join(k for k in procfile.parse_procfile_keys(f)))
