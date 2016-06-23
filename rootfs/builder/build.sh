@@ -27,16 +27,6 @@ else
     slug_file=/tmp/slug.tgz
 fi
 
-app_dir=/app
-build_root=/tmp/build
-cache_root=/tmp/cache
-buildpack_root=/tmp/buildpacks
-
-mkdir -p $app_dir
-mkdir -p $cache_root
-mkdir -p $buildpack_root
-mkdir -p $build_root/.profile.d
-
 function output_redirect() {
     if [[ "$slug_file" == "-" ]]; then
         cat - 1>&2
