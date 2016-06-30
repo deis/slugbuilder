@@ -18,5 +18,3 @@ ADD ./builder/ /tmp/builder
 RUN /tmp/builder/install-buildpacks
 
 ENTRYPOINT ["/tmp/builder/build.sh"]
-
-ENV WORKFLOW_RELEASE 2.0.0-dev
