@@ -10,7 +10,7 @@ BINDIR := ./rootfs/bin
 
 include versioning.mk
 
-SHELL_SCRIPTS = $(wildcard _scripts/*.sh) $(wildcard rootfs/bin/*) $(wildcard rootfs/builder/*)
+SHELL_SCRIPTS = $(wildcard _scripts/*.sh) $(wildcard rootfs/bin/*_object) $(wildcard rootfs/builder/*)
 
 # The following variables describe the containerized development environment
 # and other build options
@@ -56,7 +56,7 @@ test-style:
 	${DEV_ENV_CMD} shellcheck $(SHELL_SCRIPTS)
 
 test-unit:
-	@echo "Implement unit tests in _tests directory"
+	docker run --entrypoint /usr/bin/env ${IMAGE} python3 -m unittest procfile
 
 test-functional:
 	@echo "Implement functional tests in _tests directory"

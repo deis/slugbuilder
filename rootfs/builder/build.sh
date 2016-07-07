@@ -142,7 +142,7 @@ fi
 
 echo_title "Discovering process types"
 if [[ -f "$build_root/Procfile" ]]; then
-    types=$(ruby -e "require 'yaml';puts YAML.load_file('$build_root/Procfile').keys().join(', ')")
+    types=$(read_procfile_keys "$build_root/Procfile")
     echo_normal "Procfile declares types -> $types"
 fi
 default_types=""

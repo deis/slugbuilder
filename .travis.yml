@@ -8,4 +8,4 @@ services:
   - docker
 sudo: required
 script:
-  - make bootstrap test
+  - make bootstrap docker-build test
