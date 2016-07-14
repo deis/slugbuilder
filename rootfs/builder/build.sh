@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+function sleep_before_exit {
+	# delay before exiting, so stdout/stderr flushes through the logging system
+	sleep 3
+}
+trap sleep_before_exit EXIT
+
 [[ $DEIS_DEBUG ]] && set -x
 unset DEIS_DEBUG
 
@@ -19,7 +25,6 @@ if ! [[ -z "${TAR_PATH}" ]]; then
 	tar -xzf /tmp/slug.tgz -C /app/
 	unset TAR_PATH
 fi
-
 
 if [[ "$1" == "-" ]]; then
     slug_file="$1"
