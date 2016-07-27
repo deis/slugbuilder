@@ -137,11 +137,23 @@ else
     exit 1
 fi
 
+## Run pre-compile hook
+
+if [[ -f "$build_root/bin/pre-compile" ]]; then
+    "$build_root/bin/pre-compile"
+fi
+
 ## Buildpack compile
 
 "$selected_buildpack/bin/compile" "$build_root" "$cache_root" | ensure_indent
 
 "$selected_buildpack/bin/release" "$build_root" "$cache_root" > $build_root/.release
+
+## Run post-compile hook
+
+if [[ -f "$build_root/bin/post-compile" ]]; then
+    "$build_root/bin/post-compile"
+fi
 
 ## Display process types
 
