@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cache_file=/tmp/cache.tgz
+# shellcheck disable=SC1091
+source /bin/normalize_storage
+
+# Download the cache (which might not exist, hence || true to return zero exit code)
+objstorage --storage-type="$BUILDER_STORAGE" download "${CACHE_PATH}/cache.tgz" "$cache_file" &>/tmp/objstorage.log || true

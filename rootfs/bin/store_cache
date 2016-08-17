@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+cache_file=/tmp/cache.tgz
+# shellcheck disable=SC1091
+source /bin/normalize_storage
+objstorage --storage-type="$BUILDER_STORAGE" upload "$cache_file" "${CACHE_PATH}/cache.tgz"
