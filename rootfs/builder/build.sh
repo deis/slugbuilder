@@ -142,7 +142,9 @@ fi
 ## Run pre-compile hook
 
 if [[ -f "$build_root/bin/pre-compile" ]]; then
+    pushd "$build_root" &> /dev/null
     "$build_root/bin/pre-compile"
+    popd &>/dev/null
 fi
 
 ## Buildpack compile
@@ -154,7 +156,9 @@ fi
 ## Run post-compile hook
 
 if [[ -f "$build_root/bin/post-compile" ]]; then
+    pushd "$build_root" &> /dev/null
     "$build_root/bin/post-compile"
+    popd &>/dev/null
 fi
 
 ## Display process types
