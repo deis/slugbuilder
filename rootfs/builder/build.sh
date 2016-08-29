@@ -166,7 +166,7 @@ if [[ -f "$build_root/Procfile" ]]; then
 fi
 default_types=""
 if [[ -s "$build_root/.release" ]]; then
-    default_types=$(ruby -e "require 'yaml';puts (YAML.load_file('$build_root/.release')['default_process_types'] || {}).keys().join(', ')")
+    default_types=$(ruby -e "require 'yaml';puts ((YAML.load_file('$build_root/.release') || {})['default_process_types'] || {}).keys().join(', ')")
     [[ $default_types ]] && echo_normal "Default process types for $buildpack_name -> $default_types"
 fi
 
@@ -184,7 +184,7 @@ else
 fi
 
 if [[ ! -f "$build_root/Procfile" ]]; then
-	if [[ -s "$build_root/.release" ]]; then
+	if [[ -s "$build_root/.release" ]] && [[ $default_types ]]; then
 		ruby -e "require 'yaml';procTypes = (YAML.load_file('$build_root/.release')['default_process_types']);open('$build_root/Procfile','w') {|f| YAML.dump(procTypes,f)}"
 	else
 		echo "{}" > $build_root/Procfile
