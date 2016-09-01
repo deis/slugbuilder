@@ -28,7 +28,7 @@ build:
 	@echo Nothing to do.
 
 docker-build:
-	docker build --rm -t ${IMAGE} rootfs
+	docker build --pull --rm -t ${IMAGE} rootfs
 	docker tag ${IMAGE} ${MUTABLE_IMAGE}
 
 deploy: docker-build docker-push
