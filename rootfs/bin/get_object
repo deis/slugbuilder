@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
-
 GET_PATH=/tmp/slug.tgz
-
-export BUCKET_FILE=/var/run/secrets/deis/objectstore/creds/builder-bucket
-if [ "$BUILDER_STORAGE" == "minio" ]; then
-  mkdir -p /app/objectstore/minio/
-  echo "git" > /app/objectstore/minio/builder-bucket
-  export BUCKET_FILE=/app/objectstore/minio/builder-bucket
-elif [ "$BUILDER_STORAGE" == "azure" ] || [ "$BUILDER_STORAGE" == "swift" ] ; then
-  export CONTAINER_FILE=/var/run/secrets/deis/objectstore/creds/builder-container
-fi
+# shellcheck disable=SC1091
+source /bin/normalize_storage
 objstorage --storage-type="$BUILDER_STORAGE" download "$TAR_PATH" "$GET_PATH"

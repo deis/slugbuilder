@@ -10,7 +10,7 @@ BINDIR := ./rootfs/bin
 
 include versioning.mk
 
-SHELL_SCRIPTS = $(wildcard _scripts/*.sh) $(wildcard rootfs/bin/*_object) $(wildcard rootfs/builder/*)
+SHELL_SCRIPTS = $(wildcard _scripts/*.sh) $(wildcard rootfs/bin/*_object) $(wildcard rootfs/bin/*_cache) rootfs/bin/normalize_storage $(wildcard rootfs/builder/*)
 
 # The following variables describe the containerized development environment
 # and other build options

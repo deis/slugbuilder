@@ -13,6 +13,7 @@ unset DEIS_DEBUG
 app_dir=/app
 build_root=/tmp/build
 cache_root=/tmp/cache
+cache_file=/tmp/cache.tgz
 env_root=/tmp/env
 buildpack_root=/tmp/buildpacks
 
@@ -59,6 +60,24 @@ function ensure_indent() {
         fi
     done
 }
+
+function cache_fingerprint() {
+  md5deep -r ${cache_root} | sort | uniq | md5sum
+}
+
+# Restore cache when a $CACHE_PATH was supplied
+if ! [[ -z "${CACHE_PATH}" ]]; then
+  echo_title "Restoring cache..."
+  restore_cache
+  if [[ -f ${cache_file} ]]; then
+    tar -xzf ${cache_file} -C ${cache_root}
+    echo_normal "Done!"
+  else
+    echo_normal "No cache file could be found. If you're deploying for the first time, it'll be created now."
+  fi
+
+  original_cache_fingerprint=$(cache_fingerprint)
+fi
 
 ## Copy application code over
 if [ -d "/tmp/app" ]; then
@@ -189,6 +208,31 @@ if [[ ! -f "$build_root/Procfile" ]]; then
 	else
 		echo "{}" > $build_root/Procfile
 	fi
+fi
+
+# Compress and save cache
+if ! [[ -z "${CACHE_PATH}" ]]; then
+  echo_title "Checking for changes inside the cache directory..."
+  # If there's any files in the cache_root folder, we'll create a tar and upload
+  # it for future use
+  if [ "$(ls -A ${cache_root})" ]; then
+    # Let's check if the fingerprint changed, if it did, we'll be updating
+    # the cache
+    if [[ "$original_cache_fingerprint" != "$(cache_fingerprint)" ]]; then
+      echo_normal "Files inside cache folder changed, uploading new cache..."
+
+      # Create a new cache file and check if it requires to be updated
+      tar -z -C ${cache_root} -cf ${cache_file} .
+      cache_size=$(du -Sh "$cache_file" | cut -f1)
+
+      store_cache
+      echo_normal "Done: Uploaded cache (${cache_size})"
+    else
+      echo_normal "Cache unchanged, not updating"
+    fi
+  else
+    echo_normal "No files were added to the cache folder, cache wasn't updated"
+  fi
 fi
 
 if [[ "$slug_file" != "-" ]]; then
