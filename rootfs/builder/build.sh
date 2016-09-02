@@ -73,7 +73,7 @@ if ! [[ -z "${CACHE_PATH}" ]]; then
     tar -xzf ${cache_file} -C ${cache_root}
     echo_normal "Done!"
   else
-    echo_normal "No cache file could be found. If you're deploying for the first time, it'll be created now."
+    echo_normal "No cache file found. If this is the first deploy, it will be created now."
   fi
 
   original_cache_fingerprint=$(cache_fingerprint)
