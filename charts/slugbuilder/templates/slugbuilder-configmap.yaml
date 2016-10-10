@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slugbuilder-config
+  labels:
+    heritage: deis
+data:
+  image: "quay.io/{{.Values.org}}/slugbuilder:{{.Values.docker_tag}}"
+  pullPolicy: {{ .Values.pull_policy }}
