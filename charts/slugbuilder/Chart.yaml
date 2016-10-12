@@ -1,0 +1,7 @@
+name: slugbuilder
+home: https://github.com/deis/slugbuilder
+version: <Will be populated by the ci before publishing the chart>
+description: Buildpack application builder for Deis Workflow.
+maintainers:
+  - name: Deis Team
+    email: engineering@deis.com
