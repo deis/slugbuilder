@@ -107,11 +107,11 @@ fi
 
 ## SSH key configuration
 
-if [[ -n "$SSH_KEY" ]]; then
+if [[ -f "$env_root/SSH_KEY" ]]; then
     mkdir -p ~/.ssh/
     chmod 700 ~/.ssh/
 
-    echo "$SSH_KEY" | base64 -d > ~/.ssh/id_rsa
+    base64 -d "$env_root/SSH_KEY" > ~/.ssh/id_rsa
     chmod 400 ~/.ssh/id_rsa
 
     echo 'StrictHostKeyChecking=no' > ~/.ssh/config
