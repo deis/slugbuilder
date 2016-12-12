@@ -14,12 +14,14 @@ app_dir=/app
 build_root=/tmp/build
 cache_root=/tmp/cache
 cache_file=/tmp/cache.tgz
-env_root=/tmp/env
+secret_dir=/tmp/env
+env_root=/tmp/environment
 buildpack_root=/tmp/buildpacks
 
 mkdir -p $app_dir
 mkdir -p $cache_root
 mkdir -p $env_root
+mkdir -p $secret_dir
 mkdir -p $buildpack_root
 mkdir -p $build_root/.profile.d
 
@@ -96,6 +98,12 @@ export HOME="$app_dir"
 REQUEST_ID=$(openssl rand -base64 32)
 export REQUEST_ID
 export STACK=cedar-14
+
+## copy the environment dir excluding the ephemeral ..data/ dir and other symlinks created by Kubernetes.
+
+if [ "$(ls -A $secret_dir)" ]; then
+   cp $secret_dir/* $env_root/
+fi
 
 ## SSH key configuration
 
