@@ -254,4 +254,5 @@ if [[ "$slug_file" != "-" ]]; then
     if [[ $PUT_PATH ]]; then
 			put_object
 		fi
+	fi
 fi
