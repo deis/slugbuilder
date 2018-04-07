@@ -1,4 +1,4 @@
-FROM heroku/cedar:14
+FROM heroku/heroku:16
 
 RUN mkdir /app
 RUN addgroup --quiet --gid 2000 slug && \
